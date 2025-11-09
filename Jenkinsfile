@@ -22,7 +22,7 @@
                 docker stop myapp6 || true
 		        docker rm myapp6 || true
 		        docker rmi bassam2080/myapp6 || true
-		        docker build -t bassam2080/myapp6:1.1 . 
+		        docker build -t bassam2080/myapp6  . 
 				docker compose up -d
         
         '''
