@@ -1,5 +1,5 @@
  pipeline {
-  agent any
+  agent any //test
 
   environment {
     DOCKERHUB = credentials('DockerHub')         // Exposes DOCKERHUB_USR / DOCKERHUB_PSW
