@@ -1,8 +1,9 @@
- pipeline {
+pipeline {
   agent any
 
   environment {
     DOCKERHUB = credentials('DockerHub')         // Exposes DOCKERHUB_USR / DOCKERHUB_PSW
+    DOCKER_HOST = 'tcp://docker:2376'
   }
 
   stages {
@@ -12,35 +13,28 @@
       }
     }
 
-    stage('Pull , build and Run dockerfile ') {
+    stage('Pull, Build, and Run Dockerfile') {
       steps {
-       
-      sh '''
-                docker stop myapp6 || true
-		        docker rm myapp6 || true
-		        docker rmi acatia/myapp6 || true
-		        docker build -t acatia/myapp6  . 
-				docker compose up -d
-        
+        sh '''
+          docker ps -q -f name=myapp6 && docker stop myapp6 || true
+          docker ps -a -q -f name=myapp6 && docker rm myapp6 || true
+          docker images -q acatia/myapp6 && docker rmi acatia/myapp6 || true
+          docker build -t acatia/myapp6 .
+          docker-compose up -d
         '''
       }
     }
 
-   
-
-    
     stage('Run Tests') {
       steps {
         echo "done testing"
       }
     }
 
-  stage ('cleaning'){
-  steps{
-	  sh  'docker compose down'
-	sh 'docker compose down || true'
-	   }
+    stage('Cleaning') {
+      steps {
+        sh 'docker-compose down || true'
+      }
+    }
   }
-  
 }
- }
